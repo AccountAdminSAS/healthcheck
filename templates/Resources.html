@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Check System</title>
+    <link rel="stylesheet" href="static/StyleSheet1.css">
+</head>
+<body>
+    <header>
+        <nav class="guide">
+            <a href="{{ url_for('index') }}" class="homelink">
+                <h1 id="main-heading">Comprehensive Health Check</h1>
+            </a>
+            <ul class="ul-guide">
+                <li><a href="{{ url_for('trackpage') }}" target="_self" role="link" class="">Track Progress</a></li>
+                <li><a href="{{ url_for('resources') }}" target="_self" role="link" class="active">Resources</a></li>
+                <li><a href="{{ url_for('index') }}" target="_self" role="link" class="">Health Calculator</a></li>
+                <li>
+                    <a href="{{ url_for('index') }}" id="SButton">Start Test</a>
+                </li>
+            </ul>
+        </nav>
+        <hr />
+    </header>
+
+    <main>
+        <div class="ressec">
+            <h1>Resources</h1>
+            <div class="controls">
+                <input id="search1" type="text" placeholder="Search" />
+                <input id="button1" type="button" value="Search" onclick="filterLibrary()" />
+            </div>
+        </div>
+        <hr />
+
+        <h2>Library Data</h2>
+        <div id="library-content"></div>
+
+        <script>
+            let libraryData = {}; // Store data globally
+
+            async function loadLibrary() {
+                let response = await fetch('/data'); // Fetch data from Flask
+                libraryData = await response.json(); // Store in global variable
+                displayLibrary(libraryData); // Display all data initially
+            }
+
+            function displayLibrary(data) {
+                let targetArea = document.getElementById('library-content');
+                targetArea.innerHTML = ''; // Clear existing content
+
+                // Sort the keys alphabetically
+                let sortedKeys = Object.keys(data).sort();
+
+                for (let key of sortedKeys) {
+                    let section = document.createElement('div');
+                    section.classList.add('section');
+                    section.innerHTML = `<h3>${key}</h3><p>${data[key]}</p>`;
+                    targetArea.appendChild(section);
+                }
+            }
+
+            function filterLibrary() {
+                let searchQuery = document.getElementById('search1').value.toLowerCase();
+                let filteredData = {};
+
+                for (let key in libraryData) {
+                    if (key.toLowerCase().includes(searchQuery) || libraryData[key].toLowerCase().includes(searchQuery)) {
+                        filteredData[key] = libraryData[key];
+                    }
+                }
+
+                displayLibrary(filteredData); // Update displayed data with sorting
+            }
+
+            window.onload = loadLibrary; // Load data on page load
+        </script>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CHC System C</p>
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Check Results</title>
+    <link rel="stylesheet" href="static/StyleSheet1.css">
+</head>
+
+<body>
+    <header>
+        <nav class="guide">
+            <a href="{{ url_for('index') }}" class="homelink">
+                <h1 id="main-heading">Comprehensive Health Check - Results</h1>
+            </a>
+        </nav>
+        <hr />
+    </header>
+
+    <main>
+        <section>
+            <h1>Your Health Assessment Results</h1>
+            <h2>Total Score: {{ score }}</h2>
+
+            {% if bmi_result %}
+            <h3>Your BMI: {{ bmi_result }}</h3>
+            <p>
+                {% if bmi_result < 18.5 %}
+                You are underweight.
+                {% elif bmi_result < 24.9 %}
+                You have a normal weight.
+                {% elif bmi_result < 29.9 %}
+                You are overweight.
+                {% else %}
+                You have obesity.
+                {% endif %}
+            </p>
+            {% endif %}
+
+            <h3>Flagged Responses</h3>
+            <ul>
+                {% for question_id, user_answer in user_responses.items() %}
+                {% if user_answer in flagged_answers %}
+                <li><strong>{{ questions[question_id].text }}</strong>: {{ flagged_answers[user_answer] }}</li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CHC System C</p>
+    </footer>
+</body>
+</html>

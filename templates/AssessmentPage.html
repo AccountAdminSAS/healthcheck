@@ -1,0 +1,251 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Check System</title>
+    <link rel="stylesheet" href="static/StyleSheet1.css">
+</head>
+<body>
+    <header>
+        <nav class="guide">
+            <a href="{{ url_for('index') }}" class="homelink">
+                <h1 id="main-heading">Comprehensive Health Check</h1>
+            </a>
+            <ul class="ul-guide">
+                <li><a href="{{ url_for('trackpage') }}" target="_self" role="link" class="">Track Progress</a></li>
+                <li><a href="{{ url_for('resources') }}" target="_self" role="link" class="">Resources</a></li>
+                <li><a href="{{ url_for('index') }}" target="_self" role="link" class="">Health Calculator</a></li>
+            </ul>
+        </nav>
+        <hr />
+    </header>
+
+    <main>
+        <section>
+            <div class="answerpage">
+                {% if not submitted %}
+                <form method="POST">
+                    {% for question in questions %}
+                    <p>{{ question.text }}</p>
+
+                    {% if question.type == "healthcondition" %}
+                    <!-- Multiple choice checkboxes -->
+                    <input type="checkbox" name="{{ question.id }}" value="-50"> Cardiovascular
+                    <input type="checkbox" name="{{ question.id }}" value="-45"> Cancers
+                    <input type="checkbox" name="{{ question.id }}" value="-44"> Chronic Kidney and Urinary Diseases
+                    <input type="checkbox" name="{{ question.id }}" value="-40"> Chronic Respiratory Diseases
+                    <input type="checkbox" name="{{ question.id }}" value="-39"> Metabolic Disorders
+                    <input type="checkbox" name="{{ question.id }}" value="-30"> Autoimmune Diseases
+                    <input type="checkbox" name="{{ question.id }}" value="-20"> Digestive Disorders
+                    <input type="checkbox" name="{{ question.id }}" value="-20"> Chronic Infectious Diseases
+                    <input type="checkbox" name="{{ question.id }}" value="-20"> Musculoskeletal Disorders
+
+                    {% elif question.type == "integer" %}
+                    <!-- Integer input for weight or height -->
+                    {% if question.id == "002" %}
+                    <label for="height">Height (m): </label>
+                    <input type="number" name="height" min="139.7" max="243.8" step="0.1" value="{{ request.form.get('height', 0) }}">
+                    {% elif question.id == "003" %}
+                    <label for="weight">Weight (kg): </label>
+                    <input type="number" name="weight" min="25.4" max="317.5" step="0.1" value="{{ request.form.get('weight', 0) }}">
+                    {% endif %}
+
+                    {% elif question.type == "age" %}
+                    <!-- Integer input for age -->
+                    <input type="radio" name="{{ question.id }}" value="100" required> 12-20
+                    <input type="radio" name="{{ question.id }}" value="90"> 21-30
+                    <input type="radio" name="{{ question.id }}" value="75"> 31-40
+                    <input type="radio" name="{{ question.id }}" value="60"> 41-50
+                    <input type="radio" name="{{ question.id }}" value="50"> 51-60
+                    <input type="radio" name="{{ question.id }}" value="35"> 60+
+
+                    {% elif question.type == "fitness" %}
+                    <!-- Fitness level input -->
+                    <input type="radio" name="{{ question.id }}" value="100" required> 5 hours +
+                    <input type="radio" name="{{ question.id }}" value="90"> 3 - 5 hours
+                    <input type="radio" name="{{ question.id }}" value="80"> 2 - 3 hours
+                    <input type="radio" name="{{ question.id }}" value="70"> 1 - 2 hours
+                    <input type="radio" name="{{ question.id }}" value="20"> 30 min - 1 hour
+                    <input type="radio" name="{{ question.id }}" value="-20"> Never
+
+                    {% elif question.type == "strength" %}
+                    <!-- Strength training input -->
+                    <input type="radio" name="{{ question.id }}" value="100" required> 5 hours +
+                    <input type="radio" name="{{ question.id }}" value="90"> 4 - 5 hours
+                    <input type="radio" name="{{ question.id }}" value="80"> 3 - 4 hours
+                    <input type="radio" name="{{ question.id }}" value="70"> 2 - 3 hours
+                    <input type="radio" name="{{ question.id }}" value="60"> 1 - 2 hours
+                    <input type="radio" name="{{ question.id }}" value="30"> < 1 hour
+                    <input type="radio" name="{{ question.id }}" value="10"> < 30 min
+                    <input type="radio" name="{{ question.id }}" value="-10"> Never
+
+                    {% elif question.type == "sitting" %}
+                    <!-- Sitting in a chair input -->
+                    <input type="radio" name="{{ question.id }}" value="5" required> 7 hours +
+                    <input type="radio" name="{{ question.id }}" value="50"> 5 - 7 hours
+                    <input type="radio" name="{{ question.id }}" value="60"> 3 - 5 hours
+                    <input type="radio" name="{{ question.id }}" value="70"> 1 - 3 hours
+                    <input type="radio" name="{{ question.id }}" value="80"> < 1 hour
+                    <input type="radio" name="{{ question.id }}" value="90"> < 30 min
+                    <input type="radio" name="{{ question.id }}" value="100"> Never
+
+                    {% elif question.type == "sleep" %}
+                    <!-- Sleep level input -->
+                    <input type="radio" name="{{ question.id }}" value="100" required> 8 - 10 hours
+                    <input type="radio" name="{{ question.id }}" value="90"> 7 - 8 hours
+                    <input type="radio" name="{{ question.id }}" value="80"> 6 - 7 hours
+                    <input type="radio" name="{{ question.id }}" value="50"> 5 - 6 hours
+                    <input type="radio" name="{{ question.id }}" value="30"> 4 - 5 hour
+                    <input type="radio" name="{{ question.id }}" value="-10"> < 4 hours
+
+                    {% elif question.type == "water" %}
+                    <!-- Fitness level input -->
+                    <input type="radio" name="{{ question.id }}" value="100" required> Yes
+                    <input type="radio" name="{{ question.id }}" value="5"> No
+
+                    {% elif question.type == "badfood" %}
+                    <!-- Fitness level input -->
+                    <input type="radio" name="{{ question.id }}" value="100" required> 0
+                    <input type="radio" name="{{ question.id }}" value="80"> 1 - 2
+                    <input type="radio" name="{{ question.id }}" value="10"> 3 - 5
+                    <input type="radio" name="{{ question.id }}" value="-30"> 6 - 7
+                    <input type="radio" name="{{ question.id }}" value="-50"> 8 +
+
+                    {% elif question.type == "goodfood" %}
+                    <!-- Fitness level input -->
+                    <input type="radio" name="{{ question.id }}" value="100" required> 5 +
+                    <input type="radio" name="{{ question.id }}" value="80"> 3 - 5
+                    <input type="radio" name="{{ question.id }}" value="10"> 2 - 3
+                    <input type="radio" name="{{ question.id }}" value="-30"> 1 - 2
+                    <input type="radio" name="{{ question.id }}" value="-50"> Never
+
+                    {% elif question.type == "mental" %}
+                    <!-- Fitness level input -->
+                    <input type="radio" name="{{ question.id }}" value="100" required> Never
+                    <input type="radio" name="{{ question.id }}" value="90"> Infrequently
+                    <input type="radio" name="{{ question.id }}" value="80"> Sometimes
+                    <input type="radio" name="{{ question.id }}" value="5"> Frequently
+                    <input type="radio" name="{{ question.id }}" value="5"> Persistently
+
+                    {% elif question.type == "smoke" %}
+                    <!-- Fitness level input -->
+                    <input type="radio" name="{{ question.id }}" value="100" required> Never
+                    <input type="radio" name="{{ question.id }}" value="-10"> 1 - 5 times
+                    <input type="radio" name="{{ question.id }}" value="-30"> 5 - 10 times
+                    <input type="radio" name="{{ question.id }}" value="-50"> 10 - 20 times
+                    <input type="radio" name="{{ question.id }}" value="-100"> 21 +
+
+                    {% elif question.type == "alcohol" %}
+                    <!-- Fitness level input -->
+                    <input type="radio" name="{{ question.id }}" value="100" required> Never
+                    <input type="radio" name="{{ question.id }}" value="70"> 1 - 7 units
+                    <input type="radio" name="{{ question.id }}" value="35"> 8 - 14 units
+                    <input type="radio" name="{{ question.id }}" value="5"> 15 - 21 units
+                    <input type="radio" name="{{ question.id }}" value="-35"> 22 - 35 units
+
+                    {% elif question.type == "drugs" %}
+                    <!-- Fitness level input -->
+                    <input type="radio" name="{{ question.id }}" value="100" required> Never
+                    <input type="radio" name="{{ question.id }}" value="5"> 1 - 2 times
+                    <input type="radio" name="{{ question.id }}" value="-20"> 3 - 5 times
+                    <input type="radio" name="{{ question.id }}" value="-50"> 6 - 10 times
+                    <input type="radio" name="{{ question.id }}" value="-100"> 10 +
+
+                    {% elif question.type == "rating" %}
+                    <!-- Fitness level input -->
+                    <input type="radio" name="{{ question.id }}" value="1" required> 1
+                    <input type="radio" name="{{ question.id }}" value="2"> 2
+                    <input type="radio" name="{{ question.id }}" value="3"> 3
+                    <input type="radio" name="{{ question.id }}" value="4"> 4
+                    <input type="radio" name="{{ question.id }}" value="5"> 5
+                    <input type="radio" name="{{ question.id }}" value="6"> 6
+                    <input type="radio" name="{{ question.id }}" value="7"> 7
+                    <input type="radio" name="{{ question.id }}" value="8"> 8
+                    <input type="radio" name="{{ question.id }}" value="9"> 9
+                    <input type="radio" name="{{ question.id }}" value="10"> 10
+
+                    {% elif question.type == "choice" %}
+                    <!-- Fitness level input -->
+                    {% else %}
+                    <!-- Radio buttons for single choice questions -->
+                    <input type="radio" name="{{ question.id }}" value="1"> 1
+                    <input type="radio" name="{{ question.id }}" value="2"> 2
+                    <input type="radio" name="{{ question.id }}" value="3"> 3
+                    <input type="radio" name="{{ question.id }}" value="4"> 4
+                    <input type="radio" name="{{ question.id }}" value="5"> 5
+                    {% endif %}
+                    {% endfor %}
+
+                    <button type="submit">Submit</button>
+                </form>
+                {% else %}
+            </div>
+            
+
+                <h2>Flagged Responses</h2>
+                <div class="flagged_response">
+                    <ul>
+                        {% for answer, info in flagged_responses.items() %}
+                        <li><strong>{{ answer }}</strong>: {{ info }}</li>
+                        {% endfor %}
+                    </ul>
+                    <div class="link_res">
+                        <a href="{{ url_for('resources') }}" target="_self" role="link" class="">Learn More Here</a>
+                    </div>
+                    
+                </div>
+                <div id="results-container">
+                    {% if score is not none %}
+                    <h2>Your Total Score: {{ score }}</h2>
+                    <h3>Additional Responses:</h3>
+                    {% if bmi_result %}
+                    <h4>Your BMI: {{ bmi_result }}</h4>
+                    <div class="chart-container">
+                        <!-- BMI Chart Image -->
+                        <img src="{{ url_for('static', filename='images/ColourBMIChart.PNG') }}" alt="BMI Chart" class="bmi-chart">
+                        <!-- Marker (X) -->
+                        <div id="bmi-marker" class="marker" style="left: {{ x_position }}px;">X</div>
+                    </div>
+                    {% if bmi_result is not string %}
+                    <p>
+                        {% if bmi_result < 18.5 %}
+                        You are underweight.
+                        {% elif bmi_result < 24.9 %}
+                        You have a normal weight.
+                        {% elif bmi_result < 29.9 %}
+                        You are overweight.
+                        {% else %}
+                        You have obesity.
+                        {% endif %}
+                    </p>
+                    <p class="bmi_dis">
+                        The Body Mass Index (BMI) calculation provided by this tool is for informational purposes only and should not be considered a substitute for professional medical advice, diagnosis, or treatment. 
+                        BMI is a general indicator of body weight relative to height but does not account for factors such as muscle mass, bone density, distribution of fat, or overall health status.
+                        For a more comprehensive health assessment, please consult a qualified healthcare professional. Do not make significant lifestyle, dietary, or medical decisions based solely on this BMI result.
+                    </p>
+                    <div id="retakeButtonContainer">
+                        <form action="{{ url_for('assessmentpage') }}" method="GET">
+                            <button type="submit">Retake Assessment</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                    {% else %}
+
+                        <p>No BMI data available.<p/>
+
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CHC System C</p>
+    </footer>
+
+</body>
+
+</html>

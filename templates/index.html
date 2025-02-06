@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Check System</title>
+    <link rel="stylesheet" href="static/StyleSheet1.css">
+</head>
+<body>
+    <header>
+        <nav class="guide">
+            <a href="{{ url_for('index') }}" class="homelink">
+                <h1 id="main-heading">Comprehensive Health Check</h1>
+            </a>
+            <ul class="ul-guide">
+                <li><a href="{{ url_for('trackpage') }}" target="_self" role="link" class="">Track Progress</a></li>
+                <li><a href="{{ url_for('resources') }}" target="_self" role="link" class="">Resources</a></li>
+                <li><a href="{{ url_for('index') }}" target="_self" role="link" class="active">Health Calculator</a></li>
+                <li>
+                   <a href="{{ url_for('assessmentpage') }}" id="SButton">Start Test</a>
+                </li>
+            </ul>
+        </nav>
+        <hr />
+    </header>
+
+    <main>
+        <!-- Home Section -->
+        <section>
+            <div class="introp1">
+                <h2>Calculate your health score</h2>
+                <p>
+                    A comprehensive health check calculator is a valuable tool designed to help individuals assess
+                    various aspects of their health and well-being. By considering factors such as lifestyle habits,
+                    nutrition, and physical activity, this tool provides personalised insights and recommendations
+                    to improve overall health. Unlike traditional methods that rely on a single metric, like Body Mass Index (BMI),
+                    the comprehensive health check calculator offers a more holistic view, ensuring that users receive
+                    a thorough analysis tailored to their unique needs.
+                </p>
+                <p>
+                    Whether you're looking to track fitness progress, manage weight, or optimise your daily habits,
+                    this calculator serves as a user-friendly guide for taking proactive steps toward a healthier lifestyle.
+                </p>
+            </div>
+        </section>
+        <section>
+            <div class="whouse">
+                <h2>Use this service for:</h2>
+                <ul>
+                    <li>Tracking your health progress</li>
+                    <li>Viewing resources related to health</li>
+                    <li>Creating catered health goals for you long term</li>
+                    <li>Testing your health beyond the BMI calculator</li>
+                </ul>
+                <hr />
+                <p>
+                    Whether you're looking to track fitness progress, manage weight, or optimise your daily habits,
+                    this calculator serves as a user-friendly guide for taking proactive steps toward a healthier lifestyle.
+                </p>
+            </div>
+            <div class="whonotuse">
+                <h2>This service is NOT for:</h2>
+                <ul>
+                    <li>Dignosing health conditions</li>
+                    <li>Assessing health conditions</li>
+                    <li>Acting as a substitute for medical advice</li>
+                    <li>Providing medical advice beyond recommended standard practice</li>
+                </ul>
+                <hr />
+                <p>
+                    Whether you're looking to track fitness progress, manage weight, or optimise your daily habits,
+                    this calculator serves as a user-friendly guide for taking proactive steps toward a healthier lifestyle.
+                </p>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section>
+            <div class="linkpart">
+                <div class="image-item">
+                    <img src="{{ url_for('static', filename='images/healthcalcimage.png') }}" alt="Heart">
+                    <ul class="picturelinks">
+                        <li><a href="{{ url_for('index') }}" target="_self" role="link" class="active">Health Calculator</a></li>
+                    </ul>
+                </div>
+                <div class="image-item">
+                    <img src="{{ url_for('static', filename='images/trackingimage.png') }}" alt="Tracking">
+                    <ul class="picturelinks">
+                        <li><a href="{{ url_for('trackpage') }}" target="_self" role="link" class="">Track Progress</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="yourresults">
+                <h1>Your Results</h1>
+                <p>
+                    "Your comprehensive health results will be displayed as a
+                    'health score,' making it easy to understand your health status."
+                </p>
+                <p>
+                    The assesment includes a BMI calculation. This calculation can be used as a rough
+                    guide to help understand your general size. Additional questions will be used to
+                    further evaluate your overall health.
+                </p>
+                <hr />
+                <h1>What do the results mean?</h1>
+                <p>
+                    The results will vary based on your answers. After completing the assesment,
+                    you will receive personalised health goals designed to support you and enhance your
+                    understanding of your overall health.
+                </p>
+                <p>
+                    After receiving your 'health score,' you will gain a clearer understanding of your
+                    overall health. Many individuals find it challenging to distinguish between healthy and
+                    unhealthy behaviors and lifestyle habits. By assessing your health by using this tool you should be able to 
+                    easily identify habits that are negatively impacting your health that may not have been visable before.
+                </p>
+                <a href="{{ url_for('assessmentpage') }}" id="StartButton"> Start Assessment</a>
+            </div>
+            <h1>Assessment Results</h1>
+
+            {% if score is not none %}
+            <h2>Your Score: {{ score }}</h2>
+            {% else %}
+            <p>No score available. Please take the assessment.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CHC System C </p>
+    </footer>
+
+</body>
+
+</html>
+
