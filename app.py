@@ -160,6 +160,7 @@ def assessmentpage():
     submitted = False
     x_position = 50
     bmi = None
+    score_result = ""
 
     # Initialise flagged_responses as an empty dictionary 
     flagged_responses = session.get("flagged_responses", {})
@@ -303,12 +304,22 @@ def assessmentpage():
             except ValueError:
                 bmi_result = "Invalid input for BMI calculation"
 
+        if 1 <= score <= 100:
+            score_result = "Your score is worrying and indicated you should consider making some changes"
+        elif 101 <= score <= 300:
+            score_result = "Your score is below avarage and requires some improvements"
+        elif 301 <=score <= 800:
+            score_result = "Your score is avarage but you may want to consider ajusting some of your habits"
+        elif 801 <= score <= 1500:
+            score_result = "Your score is considered very good and you should continue working hard!"
+
             
 
 
 
         # Store score, BMI result, and flagged responses in session
         session["score"] = score  
+        session["score_result"] = score_result
         session["bmi_result"] = bmi_result
         session["flagged_responses"] = flagged_responses  
 
@@ -319,6 +330,7 @@ def assessmentpage():
         "AssessmentPage.html", 
         questions=questions, 
         score=session.get("score"),
+        score_result=score_result,
         bmi_result=bmi_result,
         submitted=submitted,
         flagged_responses=flagged_responses,
